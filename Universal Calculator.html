@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Unit Converter Calculator - Model 4019</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .calculator {
+            background: linear-gradient(135deg, #f4d03f, #f1c40f);
+            border: 3px solid #d35400;
+            border-radius: 20px;
+            width: 320px;
+            max-width: 100%;
+            padding: 25px 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .brand-text {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .display-container {
+            background: linear-gradient(135deg, #a8e6cf, #88d8a3);
+            border: 2px solid #27ae60;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.2);
+        }
+
+        .display {
+            background: #2c3e50;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: right;
+            padding: 12px;
+            border-radius: 5px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+            word-break: break-all;
+        }
+
+        .unit-display {
+            color: #00ff41;
+            font-size: 12px;
+            text-align: right;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        .conversion-display {
+            background: #34495e;
+            color: #f39c12;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            text-align: right;
+            padding: 8px;
+            border-radius: 5px;
+            margin-top: 8px;
+            min-height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .model-info {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .model-title {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .model-number {
+            font-size: 10px;
+            color: #2c3e50;
+            margin-top: 3px;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            margin-top: 15px;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 6px;
+            font-size: 9px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            position: relative;
+            user-select: none;
+            line-height: 1.2;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+            background: linear-gradient(135deg, #3c5a79, #34495e);
+        }
+
+        .button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .button.unit {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .button.unit:hover {
+            background: linear-gradient(135deg, #ec7063, #e74c3c);
+        }
+
+        .button.number {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .button.number:hover {
+            background: linear-gradient(135deg, #bdc3c7, #95a5a6);
+        }
+
+        .button.operation {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .button.operation:hover {
+            background: linear-gradient(135deg, #f4b442, #f39c12);
+        }
+
+        .button.special {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+
+        .button.special:hover {
+            background: linear-gradient(135deg, #af7ac5, #9b59b6);
+        }
+
+        .button.active {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .power-indicator {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            width: 8px;
+            height: 8px;
+            background: #27ae60;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #27ae60;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .button-label {
+            display: block;
+            font-size: 7px;
+            margin-top: 2px;
+            opacity: 0.8;
+            line-height: 1;
+        }
+
+        .category-display {
+            text-align: center;
+            font-size: 10px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 480px) {
+            .calculator {
+                width: 95%;
+                max-width: 350px;
+                padding: 20px 15px;
+            }
+            
+            .button {
+                padding: 8px 4px;
+                font-size: 8px;
+            }
+            
+            .display {
+                font-size: 20px;
+            }
+            
+            .conversion-display {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="power-indicator"></div>
+        
+        <div class="header">
+            <div class="brand-text">Universal Calculator</div>
+        </div>
+
+        <div class="display-container">
+            <div class="category-display" id="category-display">LENGTH CONVERTER</div>
+            <div class="display" id="display">1000</div>
+            <div class="unit-display" id="unit-display">METERS</div>
+            <div class="conversion-display" id="conversion-display">3280.84 FEET</div>
+        </div>
+
+        <div class="model-info">
+            <div class="model-title">Universal Unit Converter</div>
+            <div class="model-number">Model 4019 - Multi-Unit Conversion Calculator</div>
+        </div>
+
+        <div class="button-grid">
+            <!-- Row 1 - Special Functions -->
+            <button class="button special" onclick="solarPower()">☀<span class="button-label">Solar Power</span></button>
+            <button class="button operation" onclick="clearAll()">Off</button>
+            <button class="button operation" onclick="togglePower()">On/C</button>
+            <button class="button operation" onclick="backspace()">←</button>
+            <button class="button operation" onclick="swapUnits()">⇄<span class="button-label">Swap</span></button>
+
+            <!-- Row 2 - Unit Categories Top -->
+            <button class="button unit active" onclick="setCategory('length')">Length<span class="button-label">Meter/Feet</span></button>
+            <button class="button unit" onclick="setCategory('weight')">Weight<span class="button-label">Kg/Pound</span></button>
+            <button class="button unit" onclick="setCategory('temp')">Temp<span class="button-label">C/F/K</span></button>
+            <button class="button unit" onclick="setCategory('area')">Area<span class="button-label">Sq Meter</span></button>
+            <button class="button unit" onclick="setCategory('volume')">Volume<span class="button-label">Liter/Gal</span></button>
+
+            <!-- Row 3 - Unit Categories Middle -->
+            <button class="button unit" onclick="setCategory('time')">Time<span class="button-label">Hr/Min/Sec</span></button>
+            <button class="button unit" onclick="setCategory('speed')">Speed<span class="button-label">Km/h Mph</span></button>
+            <button class="button unit" onclick="setCategory('energy')">Energy<span class="button-label">Joule/Cal</span></button>
+            <button class="button unit" onclick="setCategory('pressure')">Press<span class="button-label">Pa/Psi</span></button>
+            <button class="button unit" onclick="setCategory('data')">Data<span class="button-label">GB/MB</span></button>
+
+            <!-- Row 4 - Unit Selection and Operations -->
+            <button class="button operation" onclick="cycleFromUnit()">From<span class="button-label">Input Unit</span></button>
+            <button class="button operation" onclick="cycleToUnit()">To<span class="button-label">Output Unit</span></button>
+            <button class="button operation" onclick="decimal()">.</button>
+            <button class="button operation" onclick="divide()">/</button>
+            <button class="button operation" onclick="percentage()">%</button>
+
+            <!-- Row 5 - Memory and Operations -->
+            <button class="button special" onclick="convert()">Conv<span class="button-label">Convert</span></button>
+            <button class="button number" onclick="inputNumber('7')">7</button>
+            <button class="button number" onclick="inputNumber('8')">8</button>
+            <button class="button number" onclick="inputNumber('9')">9</button>
+            <button class="button operation" onclick="add()">+</button>
+
+            <!-- Row 6 -->
+            <button class="button special" onclick="store()">Stor<span class="button-label">Memory</span></button>
+            <button class="button number" onclick="inputNumber('4')">4</button>
+            <button class="button number" onclick="inputNumber('5')">5</button>
+            <button class="button number" onclick="inputNumber('6')">6</button>
+            <button class="button operation" onclick="multiply()">×</button>
+
+            <!-- Row 7 -->
+            <button class="button special" onclick="recall()">Rcl<span class="button-label">Recall</span></button>
+            <button class="button number" onclick="inputNumber('1')">1</button>
+            <button class="button number" onclick="inputNumber('2')">2</button>
+            <button class="button number" onclick="inputNumber('3')">3</button>
+            <button class="button operation" onclick="subtract()">-</button>
+
+            <!-- Row 8 -->
+            <button class="button special" onclick="memoryPlus()">M+</button>
+            <button class="button number" onclick="inputNumber('0')">0</button>
+            <button class="button operation" onclick="clearEntry()">CE</button>
+            <button class="button operation" onclick="calculate()">=</button>
+            <button class="button operation" onclick="add()">+</button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let unitDisplay = document.getElementById('unit-display');
+        let conversionDisplay = document.getElementById('conversion-display');
+        let categoryDisplay = document.getElementById('category-display');
+        
+        let currentInput = '1000';
+        let currentCategory = 'length';
+        let fromUnit = 'meter';
+        let toUnit = 'feet';
+        let memory = 0;
+        let isNewInput = false;
+        let operator = null;
+        let previousInput = null;
+
+        // Comprehensive unit conversion data
+        const unitData = {
+            length: {
+                name: 'LENGTH CONVERTER',
+                units: {
+                    meter: { name: 'METERS', factor: 1 },
+                    feet: { name: 'FEET', factor: 3.28084 },
+                    inch: { name: 'INCHES', factor: 39.3701 },
+                    cm: { name: 'CM', factor: 100 },
+                    km: { name: 'KM', factor: 0.001 },
+                    yard: { name: 'YARDS', factor: 1.09361 },
+                    mile: { name: 'MILES', factor: 0.000621371 },
+                    mm: { name: 'MM', factor: 1000 }
+                }
+            },
+            weight: {
+                name: 'WEIGHT CONVERTER',
+                units: {
+                    kg: { name: 'KG', factor: 1 },
+                    pound: { name: 'POUNDS', factor: 2.20462 },
+                    gram: { name: 'GRAMS', factor: 1000 },
+                    ounce: { name: 'OUNCES', factor: 35.274 },
+                    ton: { name: 'TONS', factor: 0.001 },
+                    stone: { name: 'STONES', factor: 0.157473 }
+                }
+            },
+            temp: {
+                name: 'TEMPERATURE CONVERTER',
+                units: {
+                    celsius: { name: '°C', factor: 1 },
+                    fahrenheit: { name: '°F', factor: 1 },
+                    kelvin: { name: 'K', factor: 1 }
+                }
+            },
+            area: {
+                name: 'AREA CONVERTER',
+                units: {
+                    sqmeter: { name: 'SQ M', factor: 1 },
+                    sqfeet: { name: 'SQ FT', factor: 10.7639 },
+                    sqkm: { name: 'SQ KM', factor: 0.000001 },
+                    acre: { name: 'ACRES', factor: 0.000247105 },
+                    hectare: { name: 'HECTARES', factor: 0.0001 }
+                }
+            },
+            volume: {
+                name: 'VOLUME CONVERTER',
+                units: {
+                    liter: { name: 'LITERS', factor: 1 },
+                    gallon: { name: 'GALLONS', factor: 0.264172 },
+                    ml: { name: 'ML', factor: 1000 },
+                    cuft: { name: 'CU FT', factor: 0.0353147 },
+                    cum: { name: 'CU M', factor: 0.001 }
+                }
+            },
+            time: {
+                name: 'TIME CONVERTER',
+                units: {
+                    second: { name: 'SECONDS', factor: 1 },
+                    minute: { name: 'MINUTES', factor: 0.0166667 },
+                    hour: { name: 'HOURS', factor: 0.000277778 },
+                    day: { name: 'DAYS', factor: 0.0000115741 },
+                    week: { name: 'WEEKS', factor: 0.00000164609 }
+                }
+            },
+            speed: {
+                name: 'SPEED CONVERTER',
+                units: {
+                    mps: { name: 'M/S', factor: 1 },
+                    kmh: { name: 'KM/H', factor: 3.6 },
+                    mph: { name: 'MPH', factor: 2.23694 },
+                    knot: { name: 'KNOTS', factor: 1.94384 }
+                }
+            },
+            energy: {
+                name: 'ENERGY CONVERTER',
+                units: {
+                    joule: { name: 'JOULES', factor: 1 },
+                    calorie: { name: 'CALORIES', factor: 0.239006 },
+                    kwh: { name: 'KWH', factor: 0.000000277778 },
+                    btu: { name: 'BTU', factor: 0.000947817 }
+                }
+            },
+            pressure: {
+                name: 'PRESSURE CONVERTER',
+                units: {
+                    pascal: { name: 'PASCALS', factor: 1 },
+                    psi: { name: 'PSI', factor: 0.000145038 },
+                    bar: { name: 'BAR', factor: 0.00001 },
+                    atm: { name: 'ATM', factor: 0.00000986923 }
+                }
+            },
+            data: {
+                name: 'DATA CONVERTER',
+                units: {
+                    byte: { name: 'BYTES', factor: 1 },
+                    kb: { name: 'KB', factor: 0.001 },
+                    mb: { name: 'MB', factor: 0.000001 },
+                    gb: { name: 'GB', factor: 0.000000001 },
+                    tb: { name: 'TB', factor: 0.000000000001 }
+                }
+            }
+        };
+
+        function updateDisplay() {
+            display.textContent = currentInput;
+            unitDisplay.textContent = unitData[currentCategory].units[fromUnit].name;
+            categoryDisplay.textContent = unitData[currentCategory].name;
+            performConversion();
+        }
+
+        function performConversion() {
+            let inputValue = parseFloat(currentInput) || 0;
+            let result;
+
+            if (currentCategory === 'temp') {
+                result = convertTemperature(inputValue, fromUnit, toUnit);
+            } else {
+                // Standard factor-based conversion
+                let baseValue = inputValue / unitData[currentCategory].units[fromUnit].factor;
+                result = baseValue * unitData[currentCategory].units[toUnit].factor;
+            }
+
+            conversionDisplay.textContent = `${result.toFixed(6).replace(/\.?0+$/, '')} ${unitData[currentCategory].units[toUnit].name}`;
+        }
+
+        function convertTemperature(value, from, to) {
+            let celsius;
+            
+            // Convert to Celsius first
+            if (from === 'celsius') celsius = value;
+            else if (from === 'fahrenheit') celsius = (value - 32) * 5/9;
+            else if (from === 'kelvin') celsius = value - 273.15;
+            
+            // Convert from Celsius to target
+            if (to === 'celsius') return celsius;
+            else if (to === 'fahrenheit') return celsius * 9/5 + 32;
+            else if (to === 'kelvin') return celsius + 273.15;
+        }
+
+        function inputNumber(num) {
+            if (isNewInput) {
+                currentInput = num;
+                isNewInput = false;
+            } else {
+                if (currentInput === '0' || currentInput === '1000') {
+                    currentInput = num;
+                } else {
+                    currentInput += num;
+                }
+            }
+            updateDisplay();
+        }
+
+        function decimal() {
+            if (!currentInput.includes('.')) {
+                currentInput += '.';
+                updateDisplay();
+            }
+        }
+
+        function clearAll() {
+            currentInput = '0';
+            operator = null;
+            previousInput = null;
+            isNewInput = false;
+            updateDisplay();
+        }
+
+        function clearEntry() {
+            currentInput = '0';
+            updateDisplay();
+        }
+
+        function togglePower() {
+            clearAll();
+            currentInput = '1000';
+            currentCategory = 'length';
+            fromUnit = 'meter';
+            toUnit = 'feet';
+            setActiveCategory();
+            updateDisplay();
+        }
+
+        function backspace() {
+            if (currentInput.length > 1) {
+                currentInput = currentInput.slice(0, -1);
+            } else {
+                currentInput = '0';
+            }
+            updateDisplay();
+        }
+
+        function setCategory(category) {
+            currentCategory = category;
+            let units = Object.keys(unitData[category].units);
+            fromUnit = units[0];
+            toUnit = units[1] || units[0];
+            setActiveCategory();
+            updateDisplay();
+        }
+
+        function setActiveCategory() {
+            document.querySelectorAll('.button.unit').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function cycleFromUnit() {
+            let units = Object.keys(unitData[currentCategory].units);
+            let currentIndex = units.indexOf(fromUnit);
+            let nextIndex = (currentIndex + 1) % units.length;
+            fromUnit = units[nextIndex];
+            updateDisplay();
+        }
+
+        function cycleToUnit() {
+            let units = Object.keys(unitData[currentCategory].units);
+            let currentIndex = units.indexOf(toUnit);
+            let nextIndex = (currentIndex + 1) % units.length;
+            toUnit = units[nextIndex];
+            updateDisplay();
+        }
+
+        function swapUnits() {
+            let temp = fromUnit;
+            fromUnit = toUnit;
+            toUnit = temp;
+            
+            // Also swap the current input value with converted value
+            let convText = conversionDisplay.textContent;
+            let convValue = parseFloat(convText.split(' ')[0]);
+            if (!isNaN(convValue)) {
+                currentInput = convValue.toString();
+            }
+            updateDisplay();
+        }
+
+        function convert() {
+            performConversion();
+        }
+
+        // Calculator functions
+        function setOperator(op) {
+            if (operator && !isNewInput) {
+                calculate();
+            }
+            operator = op;
+            previousInput = parseFloat(currentInput);
+            isNewInput = true;
+        }
+
+        function add() { setOperator('+'); }
+        function subtract() { setOperator('-'); }
+        function multiply() { setOperator('*'); }
+        function divide() { setOperator('/'); }
+
+        function calculate() {
+            if (operator && previousInput !== null && !isNewInput) {
+                let current = parseFloat(currentInput);
+                let result;
+
+                switch (operator) {
+                    case '+': result = previousInput + current; break;
+                    case '-': result = previousInput - current; break;
+                    case '*': result = previousInput * current; break;
+                    case '/': result = current !== 0 ? previousInput / current : 0; break;
+                    default: return;
+                }
+
+                currentInput = result.toString();
+                operator = null;
+                previousInput = null;
+                isNewInput = true;
+                updateDisplay();
+            }
+        }
+
+        function percentage() {
+            let current = parseFloat(currentInput);
+            currentInput = (current / 100).toString();
+            updateDisplay();
+        }
+
+        function store() {
+            memory = parseFloat(currentInput);
+        }
+
+        function recall() {
+            currentInput = memory.toString();
+            updateDisplay();
+        }
+
+        function memoryPlus() {
+            memory += parseFloat(currentInput);
+        }
+
+        function solarPower() {
+            document.querySelector('.power-indicator').style.background = '#f1c40f';
+            setTimeout(() => {
+                document.querySelector('.power-indicator').style.background = '#27ae60';
+            }, 1000);
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', function(event) {
+            if (event.key >= '0' && event.key <= '9') {
+                inputNumber(event.key);
+            } else if (event.key === '.') {
+                decimal();
+            } else if (event.key === '+') {
+                add();
+            } else if (event.key === '-') {
+                subtract();
+            } else if (event.key === '*') {
+                multiply();
+            } else if (event.key === '/') {
+                event.preventDefault();
+                divide();
+            } else if (event.key === 'Enter' || event.key === '=') {
+                calculate();
+            } else if (event.key === 'Escape') {
+                clearAll();
+            } else if (event.key === 'Backspace') {
+                backspace();
+            }
+        });
+
+        // Button press animation
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('mousedown', function() {
+                this.style.transform = 'translateY(2px)';
+                this.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
+            });
+
+            button.addEventListener('mouseup', function() {
+                this.style.transform = '';
+                this.style.boxShadow = '';
+            });
+
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+                this.style.boxShadow = '';
+            });
+        });
+
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>
